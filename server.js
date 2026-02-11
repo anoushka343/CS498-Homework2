@@ -19,15 +19,17 @@ app.post('/register', (rec, out) => {const username = rec.body.username;
                 if(!username) {
                         return out.send("invalid username");
                 }
-                const entry = db.key(["Users", username]);
+                const entry = db.key(["User", username]);
                 //save the username to the data then
-                db.save({key: entry, data:{username}})
-                .then(() => out.send("registered success"))
+                const val = {
+                        key: entry,
+                        data: {
+                                username: username, createdAt: new Date()}};
+                db.save(val).then(()=>out.send("success"))
                 .catch((err)=>out.send(err.message));});
 
-
 //now add the list endpoint
-app.get("/list", (rec, out) => {const q = db.createQuery("Users");
+app.get("/list", (rec, out) => {const q = db.createQuery("User");
                         db.runQuery(q)
                         .then(([users]) => {const names = users.map(x => x.username);
                         out.json({users: names});})
