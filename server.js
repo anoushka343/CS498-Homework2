@@ -12,6 +12,9 @@ const db = new Datastore({databaseId: "cs498-hw2table"});
 //add the hello world thing again just to verify
 app.get("/greeting", (rec, out) => {out.send("Hello World!");});
 
+//maybe redirect to greeting afer getting 10% on the grader
+//blank page shoudl go  there probably
+app.get("/", (rec, out) => {out.redirect("/greeting");});
 //add the register endpoint
 //username : aman
 //use app.post to add data in a way
