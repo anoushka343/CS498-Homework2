@@ -10,7 +10,7 @@ app.use(exp.json());
 const db = new Datastore({databaseId: "cs498-hw2table"});
 
 //add the hello world thing again just to verify
-app.get("/", (rec, out) => {out.send("Hello World!");});
+app.get("/greeting", (rec, out) => {out.send("Hello World!");});
 
 //add the register endpoint
 //username : aman
@@ -19,7 +19,7 @@ app.post('/register', (rec, out) => {const username = rec.body.username;
                 if(!username) {
                         return out.send("invalid username");
                 }
-                const entry = db.key(["User", username]);
+                const entry = db.key(["Users", username]);
                 //save the username to the data then
                 db.save({key: entry, data:{username}})
                 .then(() => out.send("registered success"))
@@ -27,7 +27,7 @@ app.post('/register', (rec, out) => {const username = rec.body.username;
 
 
 //now add the list endpoint
-app.get("/list", (rec, out) => {const q = db.createQuery("User");
+app.get("/list", (rec, out) => {const q = db.createQuery("Users");
                         db.runQuery(q)
                         .then(([users]) => {const names = users.map(x => x.username);
                         out.json({users: names});})
