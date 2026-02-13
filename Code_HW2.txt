@@ -1,1 +1,102 @@
+const us_address = "http://34.10.202.152:8080";
+const eu_address = "http://34.14.30.234:8080";
 
+//have the function to get the latency, 10 requests
+
+async function latency() {
+	const iter = 10;
+	//how many register and list for us and eu there are
+	let reg_us = 0;
+	let reg_eu = 0;
+	let list_us = 0;
+	let list_eu = 0;
+	
+	//go through and get the latency for the us register 
+	for(let i = 0; i < iter; i++) {
+		//this will create the unique username for each iteration
+		const username = "user" +  i;
+		//get the start time
+		const start = Date.now();
+		//post it by making sure the data is on the server
+		await fetch (us_address + "/register", {
+			method: "POST", 
+			headers: {"Content-Type" : "application/json"}, 
+			body: JSON.stringify({ username: username })
+		});
+		//add the total time
+		reg_us += Date.now() - start;
+	}
+	
+	//repeat for europe register latency
+	for(let i = 0; i < iter; i++) {
+		//this will create the unique username for each iteration
+		const username = "user" +  i + "eu_users";
+		//get the start time
+		const start = Date.now();
+		//post it by making sure the data is on the server
+		await fetch (eu_address + "/register", {
+			method: "POST", 
+			headers: {"Content-Type" : "application/json"}, 
+			body: JSON.stringify({ username: username })
+		});
+		//add the total time
+		reg_eu += Date.now() - start;
+	}
+	
+	//repeat for us list latency
+	for (let i = 0; i < iter; i++) {
+	    const start = Date.now();
+	    await fetch(us_address + "/list"); 
+	    list_us += Date.now() - start;
+	}
+	
+	//repeat for eu list latency
+	for (let i = 0; i < iter; i++) {
+	    const start = Date.now();
+	    await fetch(eu_address + "/list"); 
+	    list_eu += Date.now() - start;
+	}
+	
+	//total latency per region for list and register
+	const us_reg_lat = reg_us / iter;
+	const us_list_lat = list_us / iter;
+	const eu_reg_lat = reg_eu / iter;
+	const eu_list_lat = list_eu / iter;
+	console.log("Us register latency: " + us_reg_lat);
+	console.log("Eu register latency: " + eu_reg_lat);
+	console.log("Us list latency: " + us_list_lat);
+	console.log("EU list latency: " + eu_list_lat);
+}
+	
+async function consistency() {
+    //set the iter amount
+    let iter = 100;
+    let miss_count = 0;
+    
+    //go through to get the misses
+    for(let i = 0; i < iter; i++) {
+        const username = "user" + i + "cows";
+        //get the us register
+        await fetch(us_address + "/register", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"}, 
+            body: JSON.stringify({ username: username })
+        });
+        //get the eu list 
+        const eu_list = await fetch (eu_address + "/list");
+        //convert each json text to boject using .json
+        const objects = await eu_list.json();
+        if(!objects.users.includes(username)) {
+            miss_count++;
+        }
+    }
+    console.log("misses: " + miss_count)
+}
+
+//call then functions
+(async function () {
+  await latency();
+  await consistency();
+})();
+		
+	
