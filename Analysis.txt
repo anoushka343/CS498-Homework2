@@ -1,4 +1,5 @@
-Us register latency: 62.1
-Eu register latency: 978.5
-Us list latency: 57.7
-EU list latency: 403
+Us register latency: 104.6
+Eu register latency: 477.7
+Us list latency: 72
+EU list latency: 381.3
+misses: 0
