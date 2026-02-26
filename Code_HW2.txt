@@ -1,4 +1,14 @@
-Description: I created a Node.js script (given below) using the fetch api to see how well the app will work in multiple regions. The latency was tested by running the /register and /list endpoints 10 times. It ran from both the US and EU addresses and each request's time was measured using the Date.now() function to get the response time. The consistency was measured by running the script 100 times. Each time a new user was created on the US server and the EU server checked the /list endpoint to see if that usernamne appeared. If it hadn't appeared, the miss count was icnreased by one, meaning that the replication wasn't sucessful.
+Description: I created a Node.js script (given below) using the fetch api to see how well the app will work in multiple regions. 
+
+The latency was tested by running the /register and /list endpoints 10 times. 
+
+It ran from both the US and EU addresses and each request's time was measured using the Date.now() function to get the response time. 
+
+The consistency was measured by running the script 100 times. 
+
+Each time a new user was created on the US server and the EU server checked the /list endpoint to see if that usernamne appeared. 
+
+If it hadn't appeared, the miss count was icnreased by one, meaning that the replication wasn't sucessful.
 
 
 
