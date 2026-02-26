@@ -3,3 +3,6 @@ Eu register latency: 477.7
 Us list latency: 72
 EU list latency: 381.3
 misses: 0
+
+Discussion:
+There is a big difference in the latencies for US and Europe. The Europe server was much slower than the US server. I think this is mainly because the Europe data center is further from the computer and each request will take longer to reach there. For the consistency, I got 0 misses out of the 100 tests I ran. This means that the new users that were created in the US showed up immediately in Europe every time. The delay between US and Europe was very small so the data copied fast before the next request; this means it will feel instant to the user because there were no misses. 
